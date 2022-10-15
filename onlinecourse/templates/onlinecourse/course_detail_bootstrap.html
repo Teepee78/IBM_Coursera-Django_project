@@ -79,7 +79,7 @@
             -->
 
         {% if user.is_authenticated %}
-        <form id="questionform" action="point to a submit view" method="post">
+        <form id="questionform" action="{% url 'onlinecourse:submit' course_id=course.id %}" method="post">
             {% for question in course.question_set.all %}
             <!-- ... for each question in the course ... -->
             <div class="card mt-1">
@@ -98,8 +98,8 @@
                     {% endfor %}
                 </div>
             </div>
-            <input class="btn btn-success btn-block" type="submit" value="Submit">
             {% endfor %}
+            <input class="btn btn-success btn-block" type="submit" value="Submit">
         </form>
         {% endif %}
 

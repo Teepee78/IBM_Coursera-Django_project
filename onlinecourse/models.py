@@ -76,10 +76,14 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
 
+    def __str__(self):
+        return f"{self.title}"
 
 # Enrollment model
 # <HINT> Once a user enrolled a class, an enrollment entry should be created between the user and course
 # And we could use the enrollment to track information such as exam submissions
+
+
 class Enrollment(models.Model):
     AUDIT = 'audit'
     HONOR = 'honor'
@@ -95,6 +99,9 @@ class Enrollment(models.Model):
     date_enrolled = models.DateField(default=now)
     mode = models.CharField(max_length=5, choices=COURSE_MODES, default=AUDIT)
     rating = models.FloatField(default=5.0)
+
+    def __str__(self):
+        return f"enrollment for user: {self.user.first_name}"
 
 
 # <HINT> Create a Question Model with:
@@ -119,6 +126,9 @@ class Question(models.Model):
         else:
             return False
 
+    def __str__(self):
+        return f"{self.text[:50]}"
+
 
 #  <HINT> Create a Choice Model with:
     # Used to persist choice content for a question
@@ -131,6 +141,9 @@ class Choice(models.Model):
     text = models.CharField(max_length=500)
     correct = models.BooleanField()
 
+    def __str__(self):
+        return f"{self.text[:50]} for question: {self.question.text[:20]}"
+
 # <HINT> The submission model
 # One enrollment could have multiple submission
 # One submission could have multiple choices
@@ -140,3 +153,6 @@ class Choice(models.Model):
 class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
+
+    def __str__(self):
+        return f"submission for {self.enrollment.user.first_name} in {self.enrollment.course.name}"
